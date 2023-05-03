@@ -55,12 +55,15 @@ class ListArr
     SummaryNode *root;
     DataNode *head;
     int capacity;
-    SummaryNode *createBinaryTree(int leafs, DataNode *&head);
 
   public:
-    void ListArr(int b);
-    void updateTree();
+    ListArr(int b);
     //~ListArr();
+    SummaryNode *createBinaryTree(int leafs);
+    int leafs;
+    void insertNode(DataNode *&dataNode);
+    int updateQuantity(SummaryNode *node);
+    void updateTree();
     // int size() = 0;                // Retorna la cantidad de elementos almacenados en el ListArr
     void insert_left(int v);  // Inserta un nuevo valor v a la izquierda del ListArr
     void insert_right(int v); // Inserta un nuevo valor v a la derecha del ListArr
