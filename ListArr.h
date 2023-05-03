@@ -19,7 +19,7 @@ class DataNode
         count = 0;
         next = NULL;
     }
-    
+
     bool isFull()
     {
         return count == nCapacity;
@@ -38,10 +38,10 @@ class SummaryNode
 
     DataNode *data;
 
-    SummaryNode(int quantity, int sCapacity)
+    SummaryNode()
     {
-        this->quantity = quantity;
-        this->sCapacity = sCapacity;
+        quantity = 0;
+        sCapacity = 0;
         left = NULL;
         right = NULL;
         parent = NULL;
@@ -53,10 +53,13 @@ class ListArr
 {
   private:
     SummaryNode *root;
+    DataNode *head;
     int capacity;
+    SummaryNode *createBinaryTree(int leafs, DataNode *&head);
 
   public:
-    ListArr(int b);
+    void ListArr(int b);
+    void updateTree();
     //~ListArr();
     // int size() = 0;                // Retorna la cantidad de elementos almacenados en el ListArr
     void insert_left(int v);  // Inserta un nuevo valor v a la izquierda del ListArr
