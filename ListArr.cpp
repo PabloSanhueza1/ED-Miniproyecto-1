@@ -6,8 +6,7 @@ ListArr::ListArr(int b)
     leafs = 0;
     DataNode *initialNode = new DataNode(capacity);
     head = initialNode;
-    root = new SummaryNode();
-    root->data = initialNode;
+    root = createBinaryTree(1); // se llama al método para crear el árbol binario
 }
 
 void ListArr::insertNode(DataNode *&dataNode)
@@ -19,7 +18,7 @@ void ListArr::insertNode(DataNode *&dataNode)
         newDataNode->next = dataNode->next;
     dataNode->next = newDataNode;
 }
-// a
+
 void moveRight(DataNode *&dataNode)
 {
     for (int i = dataNode->count - 1; i >= 0; i--)
@@ -47,32 +46,18 @@ void ListArr::updateTree()
 SummaryNode *ListArr::createBinaryTree(int leafs)
 {
     if (leafs == 1)
-    { /*
-         for (int i = 0; i < leafs; i++)
-         {
-             DataNode *dataNode = head->next;
-         }*/
-        DataNode *dataNode = head;
+    {
         SummaryNode *summaryNode = new SummaryNode();
-        summaryNode->data = dataNode;
-        // summaryNode->quantity = dataNode->count;
-        // summaryNode->sCapacity = dataNode->nCapacity;
+        summaryNode->data = head;
+        // updateQuantity(summaryNode);
         return summaryNode;
     }
 
     SummaryNode *newNode = new SummaryNode();
+
+    // crear sub-árboles izquierdo y derecho recursivamente
     newNode->left = createBinaryTree(leafs / 2);
     newNode->right = createBinaryTree(leafs - leafs / 2);
-    if (newNode->left->data != NULL)
-    {
-        newNode->data = newNode->left->data;
-        DataNode *current = newNode->data;
-        while (current->next != NULL)
-        {
-            current = current->next;
-        }
-        current->next = newNode->right->data;
-    }
 
     updateQuantity(newNode);
 
@@ -127,7 +112,6 @@ void ListArr::insert_right(int v)
     int flag = 0;
 
     // llega al último DataNode de la derecha
-    // SE NECESITA ARBOL PARA NAVEGAR HACIA LA DERECHA
     while (actualNode->right != NULL)
         actualNode = actualNode->right;
 
@@ -144,14 +128,6 @@ void ListArr::insert_right(int v)
         dataNode->next->container[dataNode->next->count] = v;
         dataNode->next->count = dataNode->next->count + 1;
     }
-
-    // si el flag es verdadero, el nuevo DataNode estará vacío, por lo que se ingresa un elemento en la posición 0
-    // sino, el arreglo no está lleno y se agrega un elemento en la posicion después del último ingresado
-    // if (flag)
-    //{
-    // dataNode->container[0] = v;
-    // dataNode->count = dataNode->count + 1;
-    //}
     else
     {
         dataNode->container[dataNode->count] = v;
@@ -161,24 +137,17 @@ void ListArr::insert_right(int v)
 
 void inOrderTraversal(SummaryNode *root)
 {
-    if (root == nullptr)
+    if (root != NULL)
     {
-        return;
+        cout << root->quantity << " " << root->sCapacity << endl;
+        inOrderTraversal(root->left);
+        inOrderTraversal(root->right);
     }
-    inOrderTraversal(root->left);
-    // Aquí se puede realizar la operación deseada con el nodo actual
-    cout << root->quantity << " " << root->sCapacity << endl;
-    inOrderTraversal(root->right);
 }
 
 void ListArr::print()
 {
-    SummaryNode *actualNode = root;
-    while (actualNode->left != NULL)
-    {
-        actualNode = actualNode->left;
-    }
-    DataNode *dataNode = actualNode->data;
+    DataNode *dataNode = head;
 
     cout << "a" << endl;
     cout << dataNode->count << endl;
