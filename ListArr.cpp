@@ -32,6 +32,7 @@ int ListArr::updateQuantity(SummaryNode *node)
 {
     int leftQuantity = 0;
     int rightQuantity = 0;
+    int dataQuantity = 0;
 
     if (node->left != NULL)
     {
@@ -39,10 +40,13 @@ int ListArr::updateQuantity(SummaryNode *node)
     }
     if (node->right != NULL)
     {
-
         rightQuantity = updateQuantity(node->right);
     }
-    node->quantity = leftQuantity + rightQuantity + node->data->count;
+    if (node->data != NULL)
+    {
+        dataQuantity = node->data->count;
+    }
+    node->quantity = leftQuantity + rightQuantity + dataQuantity;
 
     return node->quantity;
 }
@@ -51,6 +55,7 @@ int ListArr::updateCapacity(SummaryNode *node)
 {
     int leftCapacity = 0;
     int rightCapacity = 0;
+    int dataCapacity = 0;
 
     if (node->left != NULL)
     {
@@ -60,8 +65,11 @@ int ListArr::updateCapacity(SummaryNode *node)
     {
         rightCapacity = updateCapacity(node->right);
     }
-
-    node->sCapacity = leftCapacity + rightCapacity + node->data->nCapacity;
+    if (node->data != NULL)
+    {
+        dataCapacity = node->data->nCapacity;
+    }
+    node->sCapacity = leftCapacity + rightCapacity + dataCapacity;
 
     return node->quantity;
 }
