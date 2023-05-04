@@ -13,7 +13,8 @@ ListArr::ListArr(int b)
 void ListArr::insertNode(DataNode *&dataNode)
 {
     DataNode *newDataNode = new DataNode(dataNode->nCapacity);
-
+    cout << "hojas " << leafs << endl;
+    newDataNode->name = leafs;
     // se conecta el nuevo nodo con el resto de la estructura
     if (dataNode->next != NULL)
         newDataNode->next = dataNode->next;
@@ -71,7 +72,7 @@ int ListArr::updateCapacity(SummaryNode *node)
     }
     node->sCapacity = leftCapacity + rightCapacity + dataCapacity;
 
-    return node->quantity;
+    return node->sCapacity;
 }
 
 void ListArr::updateTree()
@@ -96,16 +97,6 @@ SummaryNode *ListArr::createBinaryTree(int leafs)
     newNode->left = createBinaryTree(leafs / 2);
     newNode->right = createBinaryTree(leafs - leafs / 2);
 
-    // actualizar el data del nodo si es una hoja
-    if (newNode->left->data != NULL && newNode->right->data == NULL)
-    {
-        newNode->data = newNode->left->data;
-    }
-    else if (newNode->left->data == NULL && newNode->right->data != NULL)
-    {
-        newNode->data = newNode->right->data;
-    }
-
     updateQuantity(newNode);
     updateCapacity(newNode);
 
@@ -121,6 +112,7 @@ void ListArr::insert_left(int v)
     {
         if (dataNode->next == NULL || dataNode->next->isFull())
         {
+            leafs++;
             insertNode(dataNode);
 
             dataNode->next->container[0] = dataNode->container[dataNode->count - 1];
@@ -129,11 +121,12 @@ void ListArr::insert_left(int v)
             moveRight(dataNode);
             dataNode->container[0] = v;
 
-            leafs++;
-            cout << "SE ACTUALIZA CON " << leafs << " HOJAS"
-                 << " [SE CREA NODO NUEVO]" << endl;
+            // cout << "SE ACTUALIZA CON " << leafs << " HOJAS"
+            //   << " [SE CREA NODO NUEVO]" << endl;
+            // cleanAllParents();
             root = createBinaryTree(leafs);
-            cout << "AAAAAAAAAAAAAAAAAAAAAAA" << endl;
+            assignDataNodes(root, 1);
+            // cout << "AAAAAAAAAAAAAAAAAAAAAAA" << endl;
             updateTree();
         }
         else
@@ -144,10 +137,12 @@ void ListArr::insert_left(int v)
 
             moveRight(dataNode);
             dataNode->container[0] = v;
-            cout << "SE ACTUALIZA CON " << leafs << "HOJAS"
-                 << "[no se CREA NODO NUEVO]" << endl;
+            // cout << "SE ACTUALIZA CON " << leafs << "HOJAS"
+            //   << "[no se CREA NODO NUEVO]" << endl;
 
+            // cleanAllParents();
             root = createBinaryTree(leafs);
+            assignDataNodes(root, 1);
             updateTree();
         }
     }
@@ -186,12 +181,46 @@ void ListArr::insert_right(int v)
     }
 }
 
+DataNode *ListArr::getNode(int index)
+{
+    DataNode *currentNode = head;
+    int i = 1;
+    while (currentNode != NULL && i < index)
+    {
+        currentNode = currentNode->next;
+        i++;
+    }
+    return currentNode;
+}
+
+void ListArr::assignDataNodes(SummaryNode *node, int leaf)
+{
+    if (node == NULL)
+    {
+        return;
+    }
+    if (node->left == NULL && node->right == NULL)
+    { // es una hoja
+        node->data = getNode(leaf);
+        leaf++;
+    }
+    else
+    { // no es hoja
+        assignDataNodes(node->left, leaf);
+        assignDataNodes(node->right, leaf);
+    }
+}
+
 void inOrderTraversal(SummaryNode *root)
 {
     if (root != NULL)
     {
         cout << root->quantity << " " << root->sCapacity << endl;
         inOrderTraversal(root->left);
+        if (root->left == NULL && root->right == NULL)
+        {
+            cout << "nombre: " << root->data->name << endl;
+        }
         inOrderTraversal(root->right);
     }
 }

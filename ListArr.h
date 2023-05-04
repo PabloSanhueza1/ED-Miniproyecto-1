@@ -11,11 +11,14 @@ class DataNode
     int count;
     int nCapacity;
 
+    int name;
+
     DataNode *next;
     DataNode(int nCapacity)
     {
         this->nCapacity = nCapacity;
         container = new int[nCapacity];
+        name = 1;
         count = 0;
         next = NULL;
     }
@@ -34,7 +37,6 @@ class SummaryNode
 
     SummaryNode *left;
     SummaryNode *right;
-    SummaryNode *parent;
 
     DataNode *data;
 
@@ -44,7 +46,6 @@ class SummaryNode
         sCapacity = 0;
         left = NULL;
         right = NULL;
-        parent = NULL;
         data = NULL;
     }
 };
@@ -57,8 +58,11 @@ class ListArr
     int capacity;
 
   public:
+    void assignDataNodes(SummaryNode *root, int leaf);
+    DataNode *getNode(int index);
     ListArr(int b);
     //~ListArr();
+    // void cleanAllParents();
     SummaryNode *createBinaryTree(int leafs);
     int leafs;
     void insertNode(DataNode *&dataNode);
