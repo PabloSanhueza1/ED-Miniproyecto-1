@@ -13,7 +13,6 @@ ListArr::ListArr(int b)
 void ListArr::insertNode(DataNode *&dataNode)
 {
     DataNode *newDataNode = new DataNode(dataNode->nCapacity);
-    cout << "hojas " << leafs << endl;
     newDataNode->name = leafs;
     // se conecta el nuevo nodo con el resto de la estructura
     if (dataNode->next != NULL)
@@ -26,6 +25,17 @@ void moveRight(DataNode *&dataNode)
     for (int i = dataNode->count - 1; i >= 0; i--)
     {
         dataNode->container[i + 1] = dataNode->container[i];
+    }
+}
+
+void ListArr::cleanAllParents(SummaryNode *node)
+{
+    if (node != NULL)
+    {
+        node->data = NULL;
+
+        cleanAllParents(node->left);
+        cleanAllParents(node->right);
     }
 }
 
@@ -125,8 +135,12 @@ void ListArr::insert_left(int v)
             //   << " [SE CREA NODO NUEVO]" << endl;
             // cleanAllParents();
             root = createBinaryTree(leafs);
-            assignDataNodes(root, 1);
-            // cout << "AAAAAAAAAAAAAAAAAAAAAAA" << endl;
+            cleanAllParents(root);
+            for (int i = 1; i <= leafs; i++)
+            {
+                dataAssigned = false;
+                assignDataNodes(root, i);
+            } // cout << "AAAAAAAAAAAAAAAAAAAAAAA" << endl;
             updateTree();
         }
         else
@@ -142,7 +156,12 @@ void ListArr::insert_left(int v)
 
             // cleanAllParents();
             root = createBinaryTree(leafs);
-            assignDataNodes(root, 1);
+            cleanAllParents(root);
+            for (int i = 1; i <= leafs; i++)
+            {
+                dataAssigned = false;
+                assignDataNodes(root, i);
+            }
             updateTree();
         }
     }
@@ -193,35 +212,39 @@ DataNode *ListArr::getNode(int index)
     return currentNode;
 }
 
-void ListArr::assignDataNodes(SummaryNode *node, int leaf)
+void ListArr::assignDataNodes(SummaryNode *node, int index)
 {
-    if (node == NULL)
+
+    if (node == NULL ||
+        dataAssigned) // si ya se asignó el nodo de datos o se llegó al final del árbol, termina la función
     {
         return;
     }
-    if (node->left == NULL && node->right == NULL)
-    { // es una hoja
-        node->data = getNode(leaf);
-        leaf++;
+
+    if (node->left == NULL && node->right == NULL && node->data == NULL)
+    {                                // es una hoja
+        node->data = getNode(index); // asigna el nodo de datos
+        dataAssigned = true;         // marca que ya se asignó el nodo de datos
+        return;
     }
     else
-    { // no es hoja
-        assignDataNodes(node->left, leaf);
-        assignDataNodes(node->right, leaf);
+    { // no es hoja, sigue llamando recursivamente
+        assignDataNodes(node->left, index);
+        assignDataNodes(node->right, index);
     }
 }
 
-void inOrderTraversal(SummaryNode *root)
+void preOrderTraversal(SummaryNode *root)
 {
     if (root != NULL)
     {
         cout << root->quantity << " " << root->sCapacity << endl;
-        inOrderTraversal(root->left);
-        if (root->left == NULL && root->right == NULL)
+        /* if (root->left == NULL && root->right == NULL)
         {
             cout << "nombre: " << root->data->name << endl;
-        }
-        inOrderTraversal(root->right);
+        }*/
+        preOrderTraversal(root->left);
+        preOrderTraversal(root->right);
     }
 }
 
@@ -244,5 +267,5 @@ void ListArr::print()
         dataNode = dataNode->next;
     }
 
-    inOrderTraversal(root);
+    preOrderTraversal(root);
 }

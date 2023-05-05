@@ -58,11 +58,12 @@ class ListArr
     int capacity;
 
   public:
+    bool dataAssigned = false;
     void assignDataNodes(SummaryNode *root, int leaf);
     DataNode *getNode(int index);
     ListArr(int b);
     //~ListArr();
-    // void cleanAllParents();
+    void cleanAllParents(SummaryNode *node);
     SummaryNode *createBinaryTree(int leafs);
     int leafs;
     void insertNode(DataNode *&dataNode);
