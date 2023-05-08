@@ -11,6 +11,7 @@ class DataNode
     int nCapacity;
 
     DataNode *next;
+    
     DataNode(int nCapacity)
     {
         this->nCapacity = nCapacity;
