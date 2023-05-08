@@ -2,19 +2,22 @@
 #include "List.h"
 #include "ListArr.h"
 
+#include <bits/stdc++.h>
+using namespace std;
+
 int main()
 {
-    int n = 10000;
-    int b = 128;
+    int n;
+    int bArr[4] = {128, 256, 1024, 2048};
 
-    int rep = 0;
+    // Experimento Array:
+    for (int j = 0; j < 4; j++)
+    {
+        int b = bArr[j];
+        n = 10000;
 
-    Array array(b);
-    List list;
-    ListArr listArr(b);
-    /*
-        // Experimento Array:
         cout << "--------- Experimento Array ---------" << endl << endl;
+        Array array(b);
         while (n <= 80000)
         {
             cout << "n: " << n << endl;
@@ -31,8 +34,8 @@ int main()
             cout << "Tiempo total: Array - insert_left: " << elapsed_time << " ms" << endl;
 
             double tiempo_promedio = static_cast<double>(elapsed_time) / n;
-            cout << "Tiempo promedio: Array - insert_left: " << fixed << setprecision(6) << tiempo_promedio << " ms" <<
-       endl
+            cout << "Tiempo promedio: Array - insert_left: " << fixed << setprecision(6) << tiempo_promedio << " ms"
+                 << endl
                  << endl;
 
             // insert_right
@@ -65,100 +68,108 @@ int main()
                  << endl;
             n = n * 2;
         }
-        cout << endl << endl;
-        *//*
+        array.~Array();
+    }
+    cout << endl << endl;
+
     // Experimento List:
-    cout << "--------- Experimento List ---------" << endl << endl;
-    while (n <= 80000)
+    for (int j = 0; j < 4; j++)
     {
-        cout << "n: " << n << endl;
-        cout << "b: " << b << endl << endl;
+        int b = bArr[j];
+        n = 10000;
 
-        // insert_left
-        auto start_time = chrono::high_resolution_clock::now();
-        for (int i = 0; i < n; i++)
+        cout << "--------- Experimento List ---------" << endl << endl;
+        List list;
+        n = 10000;
+        while (n <= 80000)
         {
-            list.insert_left(i);
-        }
-        auto end_time = chrono::high_resolution_clock::now();
-        auto elapsed_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
-        cout << "Tiempo total: List - insert_left: " << elapsed_time << " ms" << endl;
+            cout << "b: " << b << endl;
+            cout << "n: " << n << endl << endl;
 
-        double tiempo_promedio = static_cast<double>(elapsed_time) / n;
-        cout << "Tiempo promedio: List - insert_left: " << fixed << setprecision(6) << tiempo_promedio << " ms" << endl
-             << endl;
+            // insert_left
+            auto start_time = chrono::high_resolution_clock::now();
+            for (int i = 0; i < n; i++)
+            {
+                list.insert_left(i);
+            }
+            auto end_time = chrono::high_resolution_clock::now();
+            auto elapsed_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
+            cout << "Tiempo total: List - insert_left: " << elapsed_time << " ms" << endl;
+            cout << "Tiempo promedio: List - insert_left: " << elapsed_time / n << " ms" << endl << endl;
 
-        // insert_right
-        start_time = chrono::high_resolution_clock::now();
-        for (int i = 0; i < n; i++)
-        {
-            list.insert_right(i);
+            // insert_right
+            start_time = chrono::high_resolution_clock::now();
+            for (int i = 0; i < n; i++)
+            {
+                list.insert_right(i);
+            }
+            end_time = chrono::high_resolution_clock::now();
+            elapsed_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
+            cout << "Tiempo total: List - insert_right: " << elapsed_time << " ms" << endl;
+            cout << "Tiempo promedio: List - insert_left: " << elapsed_time / n << " ms" << endl << endl;
+
+            start_time = chrono::high_resolution_clock::now();
+            for (int i = 0; i < n; i++)
+            {
+                list.find(i);
+            }
+            end_time = chrono::high_resolution_clock::now();
+            elapsed_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
+            cout << "Tiempo total: List - find: " << elapsed_time << " ms" << endl;
+            cout << "Tiempo promedio: List - insert_left: " << elapsed_time / n << " ms" << endl << endl;
+            n = n * 2;
         }
-        end_time = chrono::high_resolution_clock::now();
-        elapsed_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
-        cout << "Tiempo total: List - insert_right: " << elapsed_time << " ms" << endl;
-        tiempo_promedio = static_cast<double>(elapsed_time) / n;
-        cout << "Tiempo promedio: List - insert_right: " << fixed << setprecision(6) << tiempo_promedio << " ms" << endl
-             << endl;
-        start_time = chrono::high_resolution_clock::now();
-        for (int i = 0; i < n; i++)
-        {
-            list.find(i);
-        }
-        end_time = chrono::high_resolution_clock::now();
-        elapsed_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
-        cout << "Tiempo total: List - find: " << elapsed_time << " ms" << endl;
-        tiempo_promedio = static_cast<double>(elapsed_time) / n;
-        cout << "Tiempo promedio: List - find: " << fixed << setprecision(6) << tiempo_promedio << " ms" << endl
-             << endl;
-        n = n * 2;
+        list.~List();
     }
     cout << endl;
-    */
+
     // Experimento ListArr:
-    cout << "--------- Experimento ListArr ---------" << endl << endl;
-    while (n <= 80000)
+    for (int j = 0; j < 4; j++)
     {
-        cout << "b: " << b << endl;
-        cout << "n: " << n << endl << endl;
-        // insert_left
-        auto start_time = chrono::high_resolution_clock::now();
-        for (int i = 0; i < n; i++)
+        int b = bArr[j];
+        n = 10000;
+
+        cout << "--------- Experimento ListArr ---------" << endl << endl;
+        ListArr listArr(b);
+        n = 10000;
+        while (n <= 80000)
         {
-            listArr.insert_left(i);
+            cout << "b: " << b << endl;
+            cout << "n: " << n << endl << endl;
+            // insert_left
+            auto start_time = chrono::high_resolution_clock::now();
+            for (int i = 0; i < n; i++)
+            {
+                listArr.insert_left(i);
+            }
+            auto end_time = chrono::high_resolution_clock::now();
+            auto elapsed_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
+            cout << "Tiempo total: ListArr - insert_left: " << elapsed_time << " ms" << endl;
+            cout << "Tiempo promedio: ListArr - insert_left: " << elapsed_time / n << " ms" << endl << endl;
+
+            // insert_right
+            start_time = chrono::high_resolution_clock::now();
+            for (int i = 0; i < n; i++)
+            {
+                listArr.insert_right(i);
+            }
+            end_time = chrono::high_resolution_clock::now();
+            elapsed_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
+            cout << "Tiempo total: ListArr - insert_right: " << elapsed_time << " ms" << endl;
+            cout << "Tiempo promedio: ListArr - insert_left: " << elapsed_time / n << " ms" << endl << endl;
+
+            start_time = chrono::high_resolution_clock::now();
+            for (int i = 0; i < n; i++)
+            {
+                listArr.find(i);
+            }
+            end_time = chrono::high_resolution_clock::now();
+            elapsed_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
+            cout << "Tiempo total: ListArr - find: " << elapsed_time << " ms" << endl;
+            cout << "Tiempo promedio: ListArr - insert_left: " << elapsed_time / n << " ms" << endl << endl;
+            n = n * 2;
         }
-        auto end_time = chrono::high_resolution_clock::now();
-        auto elapsed_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
-        cout << "Tiempo total: ListArr - insert_left: " << elapsed_time << " ms" << endl;
-        double tiempo_promedio = static_cast<double>(elapsed_time) / n;
-        cout << "Tiempo promedio: ListArr - insert_left: " << fixed << setprecision(6) << tiempo_promedio << " ms"
-             << endl
-             << endl;
-        // insert_right
-        start_time = chrono::high_resolution_clock::now();
-        for (int i = 0; i < n; i++)
-        {
-            listArr.insert_right(i);
-        }
-        end_time = chrono::high_resolution_clock::now();
-        elapsed_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
-        cout << "Tiempo total: ListArr - insert_right: " << elapsed_time << " ms" << endl;
-        tiempo_promedio = static_cast<double>(elapsed_time) / n;
-        cout << "Tiempo promedio: ListArr - insert_right: " << fixed << setprecision(6) << tiempo_promedio << " ms"
-             << endl
-             << endl;
-        start_time = chrono::high_resolution_clock::now();
-        for (int i = 0; i < n; i++)
-        {
-            listArr.find(i);
-        }
-        end_time = chrono::high_resolution_clock::now();
-        elapsed_time = chrono::duration_cast<chrono::milliseconds>(end_time - start_time).count();
-        cout << "Tiempo total: ListArr - find: " << elapsed_time << " ms" << endl;
-        tiempo_promedio = static_cast<double>(elapsed_time) / n;
-        cout << "Tiempo promedio: ListArr - find: " << fixed << setprecision(6) << tiempo_promedio << " ms" << endl
-             << endl;
-        n = n * 2;
+        ListArr.~ListArr();
     }
     cout << endl;
 
