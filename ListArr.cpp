@@ -1,23 +1,11 @@
 #include "ListArr.h"
 
-// Métodos que no pertenecen al a clase ListArr:
 // Mueve los elementos hacia la derecha de un arreglo a partir del j-ésimo elemento
 void moveRight(DataNode *&dataNode, int j)
 {
     for (int i = dataNode->count - 1; i >= j; i--)
     {
         dataNode->container[i + 1] = dataNode->container[i];
-    }
-}
-
-// Imprime por pantalla recorrido pre-order del arbol binario
-void preOrder(SummaryNode *root)
-{
-    if (root != NULL)
-    {
-        cout << root->quantity << " " << root->sCapacity << endl;
-        preOrder(root->left);
-        preOrder(root->right);
     }
 }
 
@@ -94,7 +82,8 @@ void ListArr::assignDataNodes(SummaryNode *node, int index)
 {
 
     if (node == NULL ||
-        getDataAssigned()) // si ya se asignó el nodo de datos o se llegó al final del árbol, termina la función
+        // si ya se asignó el nodo de datos o se llegó al final del árbol, termina la función
+        getDataAssigned())
     {
         return;
     }
@@ -375,8 +364,6 @@ void ListArr::print()
 
         dataNode = dataNode->next;
     }
-
-    preOrder(root);
 }
 
 bool ListArr::find(int v)
